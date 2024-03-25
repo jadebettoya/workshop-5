@@ -35,15 +35,30 @@ export async function node(
 
   // TODO implement this
   // this route allows the node to receive messages from other nodes
-  // node.post("/message", (req, res) => {});
+  node.post("/message", (req, res) => {
+    const { value }: { value: Value } = req.body;
+    currentState.x = value;
+    res.sendStatus(200);
+  });
 
   // TODO implement this
   // this route is used to start the consensus algorithm
-  // node.get("/start", async (req, res) => {});
+  node.get("/start", async (req, res) => {
+    currentState.decided = true;
+    res.sendStatus(200);
+  });
 
   // TODO implement this
   // this route is used to stop the consensus algorithm
-  // node.get("/stop", async (req, res) => {});
+  node.get("/stop", async (req, res) => {
+    currentState = {
+      killed: false,
+      x: initialValue,
+      decided: false,
+      k: null
+    };
+    res.sendStatus(200);
+  });
 
   // TODO implement this
   // get the current state of a node
