@@ -23,6 +23,20 @@ export async function node(
     k: null
   };
 
+  async function startConsensusAlgorithm() {
+    currentState.decided = true;
+    currentState.k = 0; 
+  }
+
+  async function stopConsensusAlgorithm() {
+    currentState = {
+      killed: false,
+      x: initialValue,
+      decided: false,
+      k: null
+    };
+  }
+
   // TODO implement this
   // this route allows retrieving the current status of the node
   node.get("/status", (req, res) => {
@@ -44,19 +58,14 @@ export async function node(
   // TODO implement this
   // this route is used to start the consensus algorithm
   node.get("/start", async (req, res) => {
-    currentState.decided = true;
+    await startConsensusAlgorithm();
     res.sendStatus(200);
   });
 
   // TODO implement this
   // this route is used to stop the consensus algorithm
   node.get("/stop", async (req, res) => {
-    currentState = {
-      killed: false,
-      x: initialValue,
-      decided: false,
-      k: null
-    };
+    await stopConsensusAlgorithm();
     res.sendStatus(200);
   });
 
